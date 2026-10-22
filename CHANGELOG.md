@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.2
+
+- Restore all missing integration files, UI text, action metadata, original API tests and CI workflow from the original 6 October distribution archive.
+- Validate send-response recipients against the requested recipients; reject duplicate or mismatched replies as uncertain, without retries.
+- Normalize and deduplicate recipients at the client boundary as well as the action boundary.
+- Add offline Home Assistant lifecycle regression tests and compatibility CI for 2025.3.4 and 2026.10.2.
+- Document restoration provenance, validation results and the remaining live installation/account checks.
+
 ## 1.0.1
 
 - Prepare community distribution under x86digital/ha-smsbroadcast.

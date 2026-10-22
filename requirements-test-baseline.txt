@@ -1,0 +1,5 @@
+# Home Assistant 2025.3.4 / Python 3.13 compatibility harness.
+pytest-homeassistant-custom-component==0.13.225
+# HA pins this historical version; the explicit pin lets uv resolve its yanked release.
+# Isolated, socket-disabled tests only; does not constrain integration dependencies.
+aiohttp==3.11.13

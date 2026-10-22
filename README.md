@@ -1,4 +1,4 @@
-# SMS Broadcast for Home Assistant — 1.0.1
+# SMS Broadcast for Home Assistant — 1.0.2
 
 Custom integration with UI setup, `smsbroadcast.send_sms` and a credit balance sensor.
 Community custom integration maintained by [x86digital](https://github.com/x86digital). It is not affiliated with SMS Broadcast or an official Home Assistant core integration.
@@ -14,7 +14,7 @@ Requires Home Assistant 2025.3 or newer. The minimum is an API compatibility flo
 5. Go to **Settings → Devices & services → Add integration → SMS Broadcast**.
 6. Enter your own username, password and sender ID. Setup checks your balance without sending an SMS.
 
-This repository must be published before the above URL works. Catalogue listing is a separate review; adding this custom repository does not require that listing.
+HACS catalogue listing is a separate review; adding this custom repository does not require that listing.
 
 ## Install manually
 
@@ -92,7 +92,7 @@ Open the integration's **Configure** menu to change the default sender and maxim
 
 The API can accept valid recipients while rejecting others in the same action. For a partial failure, the action error reports how many were accepted and lists rejected numbers. Check the portal and resend only to rejected recipients. Avoid wrapping this action in blanket retries.
 
-No automatic send retries are performed. If sending times out, gets an HTTP error, or returns malformed/incomplete data, it may already have been accepted. Check the SMS Broadcast portal before resending. No callbacks/webhooks are installed and no external access to Home Assistant is needed.
+No automatic send retries are performed. Deduplication removes repeated numbers within one action; separate action calls (including after a restart) are independent and can send the same message again. The optional reference is for tracking, not a provider idempotency key. If sending times out, gets an HTTP error, or returns malformed/incomplete data, it may already have been accepted. Check the SMS Broadcast portal before resending. No callbacks/webhooks are installed and no external access to Home Assistant is needed.
 
 Actions support optional response data in scripts:
 
@@ -108,13 +108,21 @@ Actions support optional response data in scripts:
 
 ## Validation
 
-Offline API tests cover balance parsing, authentication failures, successful/partial/malformed send responses, number handling, special characters in POST data, message limits, HTTP failures and timeouts without retries. Run with Python and aiohttp installed:
+Offline tests use mocked provider responses and never send SMS. API tests cover balance parsing, authentication failures, successful/partial/malformed send responses, number handling, special characters in POST data, message limits, HTTP failures and timeouts without retries. Run with Python and aiohttp installed:
 
 ```sh
 python3 -m unittest discover -s tests -v
 ```
 
-Python syntax and JSON files were also checked. This package has not been loaded on a live Home Assistant instance or tested with live SMS Broadcast credentials. Designed for current Home Assistant versions using config entry runtime data; update an older installation if unsupported Home Assistant APIs appear in the logs.
+Home Assistant lifecycle tests cover UI setup, single-account protection, options, reauthentication, sensor availability, unload, action responses and partial failures. Run them in an isolated Python 3.14 environment:
+
+```sh
+python -m pip install -r requirements-test.txt
+python -m pytest tests -q
+python scripts/validate.py
+```
+
+For the March 2025 compatibility harness, use Python 3.13 and `requirements-test-baseline.txt`. Tests disable network sockets. Offline harness tests pass with Home Assistant 2025.3.4 and 2026.10.2; this is not live installation or provider-account validation. See [VALIDATION.md](VALIDATION.md) for recovery provenance, checks and remaining live tests.
 
 ## API reference
 

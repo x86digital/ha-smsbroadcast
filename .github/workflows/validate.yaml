@@ -1,0 +1,56 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install aiohttp PyYAML
+      - run: python -m unittest discover -s tests -v
+      - run: python -m compileall -q custom_components tests
+      - run: python -m pip install ruff==0.17.1
+      - run: ruff check custom_components tests
+      - run: ruff format --check custom_components tests
+      - run: python scripts/validate.py
+  home-assistant-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - python: "3.13"
+            requirements: requirements-test-baseline.txt
+          - python: "3.14"
+            requirements: requirements-test.txt
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -r ${{ matrix.requirements }}
+      - run: python -m pytest tests -q
+  hassfest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: home-assistant/actions/hassfest@master
+  hacs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hacs/action@main
+        with:
+          category: integration
+          # Custom-repository distribution starts before the separate brands PR.
+          # Remove this ignore once brand assets are accepted, before catalogue submission.
+          ignore: brands

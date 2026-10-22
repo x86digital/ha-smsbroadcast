@@ -1,0 +1,46 @@
+send_sms:
+  name: Send SMS
+  description: Send an SMS using your configured SMS Broadcast account. Acceptance is not delivery confirmation.
+  fields:
+    to:
+      name: Mobile number(s)
+      description: Quoted number, comma-separated numbers, or a list of quoted numbers.
+      required: true
+      example: "0412345678"
+      selector:
+        text:
+          multiple: true
+    message:
+      name: Message
+      required: true
+      selector:
+        text:
+          multiline: true
+    sender:
+      name: Sender override
+      description: Optional approved sender ID; leave the field omitted to use your configured sender. Empty string uses the provider's two-way number.
+      selector:
+        text:
+    reference:
+      name: Reference
+      description: Optional reference, up to 20 characters.
+      selector:
+        text:
+    delay:
+      name: Delay
+      description: Minutes before the provider sends the message.
+      default: 0
+      selector:
+        number:
+          min: 0
+          mode: box
+          unit_of_measurement: minutes
+    maxsplit:
+      name: Maximum SMS parts
+      description: Overrides your default. Longer messages can cost more credits.
+      selector:
+        number:
+          min: 1
+          max: 5
+          step: 1
+          mode: box

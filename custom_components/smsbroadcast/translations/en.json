@@ -1,0 +1,48 @@
+{
+  "title": "SMS Broadcast",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect SMS Broadcast",
+        "description": "Enter your SMS Broadcast credentials. Setup checks your balance without sending an SMS. Use an approved sender ID, or leave it empty to use the provider's two-way number.",
+        "data": {
+          "username": "Username",
+          "password": "Password",
+          "sender": "Default sender ID",
+          "maxsplit": "Maximum SMS parts (1\u20135)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Update SMS Broadcast password",
+        "data": {
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "SMS Broadcast rejected the credentials. Check your username, password and API access permissions.",
+      "cannot_connect": "Could not retrieve the account balance. Check your connection and SMS Broadcast account settings.",
+      "invalid_sender": "Use an empty sender or up to 11 letters/numbers, without spaces or punctuation."
+    },
+    "abort": {
+      "single_instance_allowed": "Only one SMS Broadcast account is supported.",
+      "already_configured": "SMS Broadcast is already configured.",
+      "reauth_successful": "Credentials updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SMS settings",
+        "description": "Long messages can use more than one credit per recipient. Sender approval is checked when the provider processes an SMS.",
+        "data": {
+          "sender": "Default sender ID",
+          "maxsplit": "Maximum SMS parts (1\u20135)"
+        }
+      }
+    },
+    "error": {
+      "invalid_sender": "Use an empty sender or up to 11 letters/numbers, without spaces or punctuation."
+    }
+  }
+}

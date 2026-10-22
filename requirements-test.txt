@@ -1,0 +1,2 @@
+# Home Assistant 2026.10.2 / Python 3.14 test harness.
+pytest-homeassistant-custom-component==0.13.373

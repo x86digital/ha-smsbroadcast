@@ -1,0 +1,14 @@
+{
+  "domain": "smsbroadcast",
+  "name": "SMS Broadcast",
+  "codeowners": [
+    "@x86digital"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/x86digital/ha-smsbroadcast",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/x86digital/ha-smsbroadcast/issues",
+  "requirements": [],
+  "version": "1.0.2"
+}
